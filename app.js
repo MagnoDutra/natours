@@ -37,7 +37,7 @@ app.get('/api/v1/tours/:id', (req, res)=>{
       message: "Invalid ID"
     });
   }
-  
+
   res.status(200).json({
     status: 'success',
     data: {
@@ -58,6 +58,24 @@ app.post('/api/v1/tours', (req,res)=>{
         tour: newTour
       }
     });
+  });
+});
+
+app.patch('/api/v1/tours/:id', (req, res) => {
+  //Essa função é só pra exemplificar os metodos da requisição, não vai ser implementada agora
+
+  if(req.params.id * 1 > tours.length) {
+    return res.status(404).send({
+      status: "failed",
+      message: "Invalid ID"
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      tour: '<updated tour here..>',
+    }
   });
 });
 
