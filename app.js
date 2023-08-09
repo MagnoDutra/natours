@@ -79,6 +79,22 @@ app.patch('/api/v1/tours/:id', (req, res) => {
   });
 });
 
+app.delete('/api/v1/tours/:id', (req, res) => {
+  //Essa função é só pra exemplificar os metodos da requisição, não vai ser implementada agora
+
+  if(req.params.id * 1 > tours.length) {
+    return res.status(404).send({
+      status: "failed",
+      message: "Invalid ID"
+    });
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null
+  });
+});
+
 const port = 3000;
 app.listen(port, () => {
   // chamado assim que o server starta
