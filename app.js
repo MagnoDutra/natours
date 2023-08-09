@@ -1,13 +1,29 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
 
 const app = express();
 
-app.use(express.json()); // Middleware
+// 1) Middleware ---------------------------------------------------
+app.use(morgan('dev'));
+
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log('Hello from the middleware');
+  next();
+});
+
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
 
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
+
+// 2) Route Handlers ---------------------------------------------------
 
 function getAllTours(req, res) {
   res.status(200).json({
@@ -91,12 +107,53 @@ function deleteTour(req, res) {
   });
 }
 
+function getAllUsers(req, res) {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+}
+
+function createUser(req, res) {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+}
+function getUser(req, res) {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+}
+function updateUser(req, res) {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+}
+function deleteUser(req, res) {
+  res.status(500).json({
+    status: 'error',
+    message: 'This route is not yet defined.',
+  });
+}
+
+// 3) Routes ---------------------------------------------------
+
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
 app
   .route('/api/v1/tours/:id')
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
+
+app.route('api/v1/users').get(getAllUsers).post(createUser);
+
+app.route('api/v1/users/:id').get(getUser).patch(updateUser).delete(deleteUser);
+
+// 4) Start server ---------------------------------------------------
 
 const port = 3000;
 app.listen(port, () => {
