@@ -4,6 +4,17 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+exports.checkID = (req, res, next, val) => {
+  console.log(`Id: ${val}`);
+  if (req.params.id * 1 >= tours.length) {
+    return res.status(404).send({
+      status: 'failed',
+      message: 'Invalid ID',
+    });
+  }
+  next();
+};
+
 exports.getAllTours = function (req, res) {
   res.status(200).json({
     status: 'success',
@@ -17,13 +28,6 @@ exports.getAllTours = function (req, res) {
 exports.getTour = function (req, res) {
   const id = req.params.id * 1; // Converto para numero pois ele vem como string
   const tour = tours.find((el) => el.id === id);
-
-  if (!tour) {
-    return res.status(404).send({
-      status: 'failed',
-      message: 'Invalid ID',
-    });
-  }
 
   res.status(200).json({
     status: 'success',
@@ -55,13 +59,6 @@ exports.createTour = function (req, res) {
 exports.updateTour = function (req, res) {
   //Essa função é só pra exemplificar os metodos da requisição, não vai ser implementada agora
 
-  if (req.params.id * 1 > tours.length) {
-    return res.status(404).send({
-      status: 'failed',
-      message: 'Invalid ID',
-    });
-  }
-
   res.status(200).json({
     status: 'success',
     data: {
@@ -72,13 +69,6 @@ exports.updateTour = function (req, res) {
 
 exports.deleteTour = function (req, res) {
   //Essa função é só pra exemplificar os metodos da requisição, não vai ser implementada agora
-
-  if (req.params.id * 1 > tours.length) {
-    return res.status(404).send({
-      status: 'failed',
-      message: 'Invalid ID',
-    });
-  }
 
   res.status(204).json({
     status: 'success',
