@@ -4,10 +4,20 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+exports.checkBody = (req, res, next) => {
+  if (!req.body.name || !req.body.price) {
+    return res.status(400).json({
+      status: 'failed',
+      message: 'You have to give a name and price!',
+    });
+  }
+  next();
+};
+
 exports.checkID = (req, res, next, val) => {
   console.log(`Id: ${val}`);
   if (req.params.id * 1 >= tours.length) {
-    return res.status(404).send({
+    return res.status(404).json({
       status: 'failed',
       message: 'Invalid ID',
     });
