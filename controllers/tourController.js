@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
 exports.checkBody = (req, res, next) => {
@@ -15,8 +15,7 @@ exports.checkBody = (req, res, next) => {
 };
 
 exports.checkID = (req, res, next, val) => {
-  console.log(`Id: ${val}`);
-  if (req.params.id * 1 >= tours.length) {
+  if (val * 1 >= tours.length) {
     return res.status(404).json({
       status: 'failed',
       message: 'Invalid ID',
@@ -49,7 +48,8 @@ exports.getTour = function (req, res) {
 
 exports.createTour = function (req, res) {
   const newId = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
+  // const newTour = Object.assign({ id: newId }, req.body);
+  const newTour = { id: newId, ...req.body };
 
   tours.push(newTour);
   fs.writeFile(
@@ -62,7 +62,7 @@ exports.createTour = function (req, res) {
           tour: newTour,
         },
       });
-    }
+    },
   );
 };
 
